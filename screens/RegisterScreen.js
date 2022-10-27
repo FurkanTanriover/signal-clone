@@ -1,13 +1,49 @@
 import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { Button, Input, Text } from "@rneui/base";
+import { firebase } from "../config";
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const register = () => {};
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackTitle: "Back to Login",
+    });
+  }, [navigation]);
+
+  const register = async () => {
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(firebase.auth().currentUser.uid)
+          .set({
+            name: fullName,
+            email: email,
+          })
+          .then(() => {
+            navigation.navigate("Login");
+            alert("User Created");
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      })
+      .catch((error) => {
+        alert(error.message);
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
+
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <Text h3 style={{ marginBottom: 50 }}>
@@ -62,6 +98,5 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 200,
-    marginTop: 10,
   },
 });
