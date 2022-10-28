@@ -19,6 +19,12 @@ const RegisterScreen = ({ navigation }) => {
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
+      .then(()=>{
+        firebase.auth.currentUser.sendEmailVerification({
+          handleCodeInApp: true,
+          url:process.env.FIREBASE_AUTH_DOMAIN
+        })
+      })
       .then(() => {
         firebase
           .firestore()

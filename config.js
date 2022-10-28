@@ -1,20 +1,26 @@
-import  firebase from "firebase/compat/app";
+import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID,
+} from "@env";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDF-meFZ0tEUSxAoRYIF0j4rcJXkhiBvno",
-  authDomain: "signal-clone-cb3d3.firebaseapp.com",
-  projectId: "signal-clone-cb3d3",
-  storageBucket: "signal-clone-cb3d3.appspot.com",
-  messagingSenderId: "673095623602",
-  appId: "1:673095623602:web:cdef6fc964e8d42f483aab",
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
 };
 
-
 if (firebase.apps.length === 0) {
-   firebase.initializeApp(firebaseConfig);
-} 
-
+  firebase.initializeApp(firebaseConfig);
+}
 
 export { firebase };
