@@ -2,6 +2,7 @@ import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import React, { useState, useLayoutEffect } from "react";
 import { Button, Input, Text } from "@rneui/base";
 import { firebase } from "../config";
+import { getAuth } from "firebase/auth";
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -19,11 +20,13 @@ const RegisterScreen = ({ navigation }) => {
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(()=>{
-        firebase.auth.currentUser.sendEmailVerification({
-          handleCodeInApp: true,
-          url:process.env.FIREBASE_AUTH_DOMAIN
-        })
+      .then((authUser) => {
+        authUser.user.updateProfile({
+          displayName: fullName,
+          photoURL:
+            imageUrl ||
+            "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
+        });
       })
       .then(() => {
         firebase
@@ -33,10 +36,10 @@ const RegisterScreen = ({ navigation }) => {
           .set({
             name: fullName,
             email: email,
+            photoURL:imageUrl,
           })
           .then(() => {
-            navigation.navigate("Login");
-            alert("User Created");
+            alert("Account created successfully");
           })
           .catch((error) => {
             alert(error.message);
@@ -80,9 +83,10 @@ const RegisterScreen = ({ navigation }) => {
           placeholder="Profile Picture URL (optional)"
           type="text"
           onSubmitEditing={register}
+          autoComplete="off"
           value={imageUrl}
           onChangeText={(text) => setImageUrl(text)}
-        />
+        /> 
       </View>
       <Button style={styles.button} raised onPress={register} title="Register" />
     </KeyboardAvoidingView>

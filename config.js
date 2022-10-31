@@ -19,8 +19,16 @@ const firebaseConfig = {
   appId: FIREBASE_APP_ID,
 };
 
+let app;
+
 if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
+  app= firebase.initializeApp(firebaseConfig);
+}
+else{
+  app= firebase.app();
 }
 
-export { firebase };
+const db=app.firestore();
+const auth=firebase.auth();
+
+export { firebase, db, auth };
